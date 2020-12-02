@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "osu!mapping plus",
+  "version": "1.0",
+  "author": "Coderbora",
+  "description": "mapping related stuff",
+
+  "background": {
+    "scripts": ["js/background.js"]
+  },
+
+  "content_scripts": [{
+    "all_frames": true,
+    "js": ["libs/jquery.min.js", "js/content.js"],
+    "matches": ["*://osu.ppy.sh/*"]
+  }],
+
+  "icons": {
+    "96": "icons/icon_96.png"
+  },
+
+  "permissions": [
+    "storage",
+    "tabs",
+    "*://osu.ppy.sh/*"
+  ]
+}
