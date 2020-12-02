@@ -11,6 +11,10 @@ browser.storage.local.get().then(s => {
     if (!store.hasOwnProperty("notifications"))
         store.notifications = []
 
+    store.subscriptions.forEach(sub => {
+        sub.in_use = false;
+    }) //to prevent unreachable subscription
+
     writeStore().then(scheduleUpdate);
 });
 
@@ -51,7 +55,7 @@ function scheduleUpdate() {
 
                 nmaps.forEach(_m => {
                     let oldVer = _sub.maps.find(m => m.id == _m.id);
-                    if(oldVer) {
+                    if (oldVer) {
                         if (oldVer.status !== _m.status) {
                             store.notifications.push({
                                 id: _m.id,
@@ -61,12 +65,11 @@ function scheduleUpdate() {
                                 date: _m.last_updated,
                                 read: false
                             })
-                        }
-                        else if (oldVer.last_updated !== _m.last_updated) {
+                        } else if (oldVer.last_updated !== _m.last_updated) {
                             store.notifications.push({
                                 id: _m.id,
                                 title: "New Update",
-                                content: `${_m.artist} - ${_m.title} has new update!`,
+                                content: `${_m.artist} - ${_m.title} has a new update!`,
                                 creator: _m.creator,
                                 date: _m.last_updated,
                                 read: false
@@ -85,7 +88,7 @@ function scheduleUpdate() {
                 })
 
                 _sub.maps.forEach(_m => {
-                    if(!nmaps.find(m => m.id == _m.id)) {
+                    if (!nmaps.find(m => m.id == _m.id)) {
                         store.notifications.push({
                             id: _m.id,
                             title: "Map Deletion",
@@ -117,12 +120,14 @@ function GetPage(url, cb) {
     xhr.send();
 }
 
-function formatMaps (maps) { return maps.map(({artist, id, status, title, last_updated}) => ({artist, id, status, title, last_updated})); }
+function formatMaps(maps) {
+    return maps.map(({artist, id, status, title, last_updated}) => ({artist, id, status, title, last_updated}));
+}
 
 browser.runtime.onMessage.addListener(handleMessage)
 
 function handleMessage(r, sender, sendResponse) {
-    if (!sender.tab || !r.q || Object.keys(store).length === 0) return;
+    if (!r.q) return;
 
     switch (r.q) {
         case "subscriptions":
@@ -171,8 +176,13 @@ function handleMessage(r, sender, sendResponse) {
                 writeStore().then(() => {
                     sendResponse({status: true})
                 })
+            } else if (r.action === "deleteAll") {
+                store.notifications.splice(0);
+                writeStore().then(() => {
+                    sendResponse({status: true})
+                })
             } else if (r.action === "remove") {
-                if(!r.index) break;
+                if (!r.index) break;
                 store.notifications.splice(r.index, 1);
                 writeStore().then(() => {
                     sendResponse({status: true})
@@ -180,6 +190,18 @@ function handleMessage(r, sender, sendResponse) {
             } else {
                 break;
             }
+            break;
+        case "updateStore":
+            if(!r.store) break;
+            let update = JSON.parse(r.store);
+            store = {
+                notifications: update.notification,
+                subscriptions: update.subscriptions
+            }
+            writeStore().then(() => {
+                clearInterval(updateTimer);
+                scheduleUpdate();
+            });
             break;
     }
 

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>osu!mapping plus settings</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+        body {
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: center;
+        }
+
+        span {
+            font-weight: 600;
+        }
+
+        .content {
+            width: 300px;
+            height: auto;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .title {
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .content > div {
+            flex: 1;
+        }
+
+        .settings {
+            margin: 10px;
+            padding: 10px;
+            border-radius: 3px;
+            border: black solid 1px;
+        }
+
+        .setting {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        .desc {
+            width: 70%;
+            float: left;
+        }
+
+        .button {
+            width: 25%;
+            float: right;
+        }
+
+        button {
+            background-color:#44c767;
+            border-radius:28px;
+            border:1px solid #18ab29;
+            display:inline-block;
+            cursor:pointer;
+            color:#ffffff;
+            font-size:12px;
+            padding:4px 0px;
+            text-decoration:none;
+            text-shadow:0px 1px 0px #2f6627;
+            width: 70px;
+        }
+        button:hover {
+            background-color:#5cbf2a;
+        }
+        button:active {
+            position:relative;
+            top:1px;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="content">
+    <div class="title"><span>osu!</span>mapping plus</div>
+
+    <div class="settings">
+        <div class="setting">
+            <div class="desc">Backup your data</div>
+            <div class="button"><button id="backup" type="button">Backup</button></div>
+        </div>
+        <div class="setting">
+            <div class="desc">Restore your data</div>
+            <div class="button"><button id="restore" type="button">Restore</button></div>
+            <input id="restoreInput" type="file" name="restore" style="display: none;" />
+        </div>
+    </div>
+</div>
+<script src="../libs/jquery.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
