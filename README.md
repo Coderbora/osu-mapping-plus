@@ -1,5 +1,7 @@
 # osu!mapping plus
 
+**DISCONTINUED:** Original site already has implemented this feature, so this extension will be discontinued. Check out the topic from [here](https://github.com/ppy/osu-web/issues/5635).
+
 This extension adds subscription feature for users and automatically tracks users mapping activity. It has an inbox to list notifications and subscriptions.
 
 **WARNING:** Do not click too much on subscribe button, you can get rate-limited very easily by spamming requests. 
